@@ -1,11 +1,10 @@
 import java.util.Scanner;
 
-public class VegenereCipher {
+class BigVegenere {
     int[] key;
     char[][] alphabet;
 
-    public VegenereCipher() { //O(N)
-        key = new int[0];
+    public BigVegenere() { //O(N)
         Scanner sc = new Scanner(System.in);
         System.out.print("Ingrese la clave: ");
         String numericKey = sc.nextLine();
@@ -16,7 +15,7 @@ public class VegenereCipher {
         }
     }
 
-    public VegenereCipher(String numericKey) { //O(N)
+    public BigVegenere(String numericKey) { //O(N)
         generateAlphabet();
         key = new int[numericKey.length()];
         for (int i = 0; i < numericKey.length(); i++) {
@@ -43,7 +42,7 @@ public class VegenereCipher {
             base[i++] = c;
         }
         for (int j = 0; j < base.length; j++) {
-            for (int k = 0; k < alphabet.length; k++) { //a-z, A-Z, 0-9
+            for (int k = 0; k < alphabet.length; k++) {
                 alphabet[j][k] = base[(j + k) % alphabet.length];
             }
         }
@@ -58,7 +57,7 @@ public class VegenereCipher {
         return 0;
     }
 
-    public String encrypt(String message) { //O(2N)
+    public String encrypt(String message) { //O(N^2)
         String messageEncrypted = "";
         int[] numericKey = new int[message.length()];
         for (int i = 0; i < message.length(); i++) {
@@ -66,14 +65,18 @@ public class VegenereCipher {
         }
 
         for (int i = 0; i < message.length(); i++) {
+            if (message.charAt(i) != ' ') {
             char encryptedChar = alphabet[charToInteger(message.charAt(i))][numericKey[i]];
             messageEncrypted += encryptedChar;
+            } else {
+                messageEncrypted += " ";
+            }
         }
 
         return messageEncrypted;
     }
 
-    public String decrypt(String encryptedMessage) { // O(n * m)
+    public String decrypt(String encryptedMessage) { // O(N^2)
         String messageDecrypted = "";
         int[] numericKey = new int[encryptedMessage.length()];
         for (int i = 0; i < encryptedMessage.length(); i++) {
@@ -81,9 +84,12 @@ public class VegenereCipher {
         }
 
         for (int i = 0; i < encryptedMessage.length(); i++) {
-            char encryptChar = encryptedMessage.charAt(i); //0-> A
-            int keyIndex = numericKey[i]; //28
-
+            char encryptChar = encryptedMessage.charAt(i);
+            if (encryptChar == ' ') {
+                messageDecrypted += " ";
+                continue;
+            }
+            int keyIndex = numericKey[i];
             for (char[] chars : alphabet) {
                 if (chars[keyIndex] == encryptChar) {
                     messageDecrypted += chars[0];
@@ -112,12 +118,12 @@ public class VegenereCipher {
 
     public char search(int position) { //O(N)
         int index = 0;
-        for (int j = 0; j < alphabet.length; j++) {
+        for (char[] chars : alphabet) {
             for (int k = 0; k < alphabet.length; k++) {
-                if (index++ == position) return alphabet[j][k];
+                if (index++ == position) return chars[k];
             }
         }
-        return 'a';
+        return ' ';
     }
 
     public char optimalSearch(int position) { // O(1)
@@ -127,16 +133,17 @@ public class VegenereCipher {
     }
 
     public static void main(String[] args) {
-        VegenereCipher vegenereCipher = new VegenereCipher("ADñ901EJ");
-        String message = "Hola";
-        String encrypted = vegenereCipher.encrypt(message);
-        System.out.println("Mensaje original: " + message);
-        System.out.println("Mensaje cifrado: " + encrypted); //ADJADH
-        String decrypted = vegenereCipher.decrypt(encrypted);
-        System.out.println("Mensaje descifrado: " + decrypted);
-        //bigVegenere.reEncrypt();
-        System.out.println(vegenereCipher.search(127));
 
-        System.out.println(vegenereCipher.optimalSearch(127));
+
+        BigVegenere bigVegenere = new BigVegenere("JAl9s2Ui");
+        String message = "Laura o Aura";
+        String encrypted = bigVegenere.encrypt(message);
+        System.out.println("Mensaje original: " + message);
+        System.out.println("Mensaje cifrado: " + encrypted);
+        String decrypted = bigVegenere.decrypt(encrypted);
+        System.out.println("Mensaje descifrado: " + decrypted);
+        bigVegenere.reEncrypt();
+        System.out.println(bigVegenere.search(127));
+        System.out.println(bigVegenere.optimalSearch(127));
     }
 }
