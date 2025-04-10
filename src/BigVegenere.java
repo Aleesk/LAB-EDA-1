@@ -6,7 +6,7 @@
  * Segura con Cifrado de Vigenere
  *
  * Autores: Alexander Bravo & Eduardo Vergara
- * Profesor: Valentina Aravena
+ * Profesora: Valentina Aravena
  * Fecha: 09-04-2025
  * GitHub: https://github.com/Aleesk/LAB-EDA-1
  */
@@ -81,7 +81,7 @@ class BigVegenere {
             char encryptedChar = alphabet[charToInteger(message.charAt(i))][numericKey[i]];
             messageEncrypted += encryptedChar;
             } else {
-                messageEncrypted += " ";
+                messageEncrypted += " "; //Concatenación de Strings O(N), se puede otpimizar con StringBuilder
             }
         }
 
@@ -95,7 +95,7 @@ class BigVegenere {
             numericKey[i] = key[i % key.length]; //extiende la key
         }
 
-        for (int i = 0; i < encryptedMessage.length(); i++) {
+        for (int i = 0; i < encryptedMessage.length(); i++) { //Itera dependiendo del largo del mensaje encriptado O(N)
             char encryptChar = encryptedMessage.charAt(i);
             if (encryptChar == ' ') {
                 messageDecrypted += " ";
@@ -104,7 +104,7 @@ class BigVegenere {
             int keyIndex = numericKey[i];
             for (char[] chars : alphabet) {
                 if (chars[keyIndex] == encryptChar) {
-                    messageDecrypted += chars[0];
+                    messageDecrypted += chars[0]; //Concatenación de Strings O(N), se puede otpimizar con StringBuilder
                     break;
                 }
             }
@@ -165,7 +165,7 @@ class BigVegenere {
         message= a.decrypt(message);
         //este seria el final de todo el metodo
         long endTime = System.nanoTime();
-        System.out.println("El metodo x se demoro " + (endTime -startTime) + " nano-segundos");
+        System.out.println("El metodo se demoro " + (endTime -startTime) + " nano-segundos");
     }
 
     public static void main(String[] args) {
